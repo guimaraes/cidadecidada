@@ -1,145 +1,210 @@
-# Teste Prático – Portal de Ouvidoria Simples
+# Portal de Ouvidoria Simples
 
-## Descrição do Sistema
-A **Prefeitura da Cidade Cidadã** deseja criar um **Portal de Ouvidoria Online** simples, que sirva como um canal direto entre os cidadãos e a ouvidoria municipal.  
-O objetivo é permitir o registro, acompanhamento e resposta de manifestações de forma ágil e transparente.  
+Backend em Java 17 com Spring Boot 3.5.5 para o sistema de ouvidoria municipal, implementado com arquitetura MVC e banco de dados versionado via Flyway.
 
-As manifestações podem ser:  
-- Reclamações  
-- Sugestões  
-- Elogios  
-- Dúvidas  
+## 🚀 Tecnologias Utilizadas
 
----
+- **Java 17**
+- **Spring Boot 3.5.5**
+- **Spring Web** - Para APIs REST
+- **Spring Validation** - Para validação de dados
+- **Spring Data JPA** - Para persistência de dados
+- **Flyway** - Para versionamento de banco de dados
+- **springdoc-openapi** - Para documentação da API
+- **MySQL 8.0** - Banco de dados principal
 
-## Parte 1 – Análise
+## 📁 Estrutura do Projeto
 
-### 1. Requisitos
+```
+com.cidadecidada.ouvidoria
+└── domain
+    ├── domain
+    │   ├── model          # Entidades JPA
+    │   ├── dto            # Objetos de transferência de dados
+    │   └── request        # Objetos de requisição
+    ├── controller         # Controladores REST
+    ├── repository         # Repositórios de dados
+    └── service            # Lógica de negócio
+```
 
-**Requisitos Funcionais**  
-1. O sistema deve permitir que o cidadão registre uma manifestação informando tipo, título, descrição e dados de contato opcionais.  
-2. O sistema deve gerar um número de protocolo único para cada manifestação registrada.  
-3. O cidadão deve poder consultar o status de sua manifestação por meio do número de protocolo.  
-4. O atendente deve poder visualizar a lista de manifestações registradas, filtrando por tipo ou status.  
-5. O atendente deve poder registrar uma resposta para cada manifestação.  
+## 🏗️ Arquitetura
 
-**Requisitos Não Funcionais**  
-1. O sistema deve estar disponível em 99% do tempo, exceto janelas de manutenção programada.  
-2. A interface deve ser simples e intuitiva, acessível em navegadores desktop e mobile.  
-3. O sistema deve garantir segurança no armazenamento dos dados, utilizando criptografia para dados sensíveis.  
+O projeto segue o padrão **MVC (Model-View-Controller)** com as seguintes camadas:
 
----
+- **Model**: Entidades JPA (`Manifestacao`, `TipoManifestacao`, `StatusManifestacao`)
+- **View**: DTOs e objetos de resposta da API
+- **Controller**: Controladores REST para exposição dos endpoints
+- **Service**: Camada de lógica de negócio
+- **Repository**: Camada de acesso a dados
 
-### 2. Perfis do Sistema
+## 🚀 Como Executar
 
-**Cidadão (usuário externo)**  
-- Registrar manifestações.  
-- Consultar o status de uma manifestação via protocolo.  
+### Pré-requisitos
 
-**Atendente da Ouvidoria (usuário interno)**  
-- Visualizar todas as manifestações cadastradas.  
-- Filtrar manifestações por tipo e status.  
-- Responder às manifestações.  
-- Alterar o status de uma manifestação.  
+- Java 17 ou superior
+- Maven 3.6+
+- MySQL 8.0 ou superior
+- Docker (opcional, para executar MySQL)
 
----
+### Configuração do Banco de Dados
 
-### 3. História de Usuário com Critérios de Aceite
+#### Opção 1: Docker (Recomendado para desenvolvimento)
 
-**História de Usuário**  
-- Como um **cidadão**, eu quero **registrar uma manifestação no portal**, para que **eu possa enviar minhas demandas à prefeitura e acompanhar seu andamento**.  
+```bash
+# Executar MySQL 8.0
+docker run -e MYSQL_ROOT_PASSWORD=root --name mysql_local -p 3306:3306 -d mysql:8.0
 
-**Critérios de Aceite**  
-1. Dado que o cidadão acessa o portal, quando preencher os campos obrigatórios da manifestação, então o sistema deve salvar os dados e gerar um protocolo único.  
-2. Dado que o cidadão registra a manifestação com sucesso, quando o envio for confirmado, então o sistema deve exibir o número de protocolo gerado.  
-3. Dado que o protocolo é gerado, quando o cidadão consultar o protocolo posteriormente, então o sistema deve retornar as informações da manifestação e seu status.  
+# Verificar se está rodando
+docker ps
+```
 
----
+#### Opção 2: Instalação Local
 
-### 4. Regras de Negócio
+1. Instale MySQL 8.0
+2. Crie um usuário ou use o root
+3. Configure as credenciais no arquivo `application-dev.yml`
 
-1. Cada manifestação registrada deve possuir obrigatoriamente um **número de protocolo único** que permita sua consulta.  
-2. Se o cidadão não informar dados de contato, o acompanhamento da manifestação só poderá ser realizado via número de protocolo.  
+### Desenvolvimento
 
----
+```bash
+# Clonar o repositório
+git clone <repository-url>
+cd cidadecidada
 
-### 5. Fluxo Funcional
+# Executar com perfil de desenvolvimento
+mvn spring-boot:run -Dspring.profiles.active=dev
+```
 
-1. O cidadão acessa o portal e registra uma manifestação.  
-2. O sistema valida os dados e gera um número de protocolo.  
-3. O cidadão recebe o protocolo para consulta futura.  
-4. O atendente acessa o sistema interno e visualiza as manifestações.  
-5. O atendente filtra e seleciona a manifestação.  
-6. O atendente registra a resposta e atualiza o status.  
-7. O cidadão pode consultar novamente pelo protocolo e visualizar a resposta.  
+### Produção
 
----
+```bash
+# Configurar variáveis de ambiente
+export MYSQL_URL=jdbc:mysql://localhost:3306/ouvidoria_prod?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=America/Sao_Paulo
+export MYSQL_USERNAME=ouvidoria
+export MYSQL_PASSWORD=ouvidoria123
 
-## Parte 2 – Modelagem Funcional
+# Executar com perfil de produção
+mvn spring-boot:run -Dspring.profiles.active=prod
+```
 
-### Opção B – Modelagem de Dados
+## 🌐 Endpoints da API
 
-#### Tabela: TB_TIPOS_MANIFESTACAO
-| Campo          | Tipo        | Obrigatório | Observação              |
-|----------------|------------|-------------|-------------------------|
-| ID_TIPO        | NUMBER(5)  | NOT NULL    | Chave primária (PK)     |
-| NOME_TIPO      | VARCHAR2(50) | NOT NULL  | Ex: Reclamação, Elogio  |
+### Manifestações
 
-#### Tabela: TB_MANIFESTACOES
-| Campo             | Tipo         | Obrigatório | Observação                      |
-|-------------------|-------------|-------------|---------------------------------|
-| ID_MANIFESTACAO   | NUMBER(10)  | NOT NULL    | Chave primária (PK)             |
-| PROTOCOLO         | VARCHAR2(20)| NOT NULL    | Número único de protocolo       |
-| ID_TIPO           | NUMBER(5)   | NOT NULL    | FK para TB_TIPOS_MANIFESTACAO   |
-| TITULO            | VARCHAR2(100)| NOT NULL   | Título da manifestação          |
-| DESCRICAO         | CLOB        | NOT NULL    | Texto detalhado                 |
-| NOME_CIDADAO      | VARCHAR2(100)| NULL       | Nome do cidadão                 |
-| EMAIL             | VARCHAR2(100)| NULL       | E-mail do cidadão               |
-| TELEFONE          | VARCHAR2(20)| NULL       | Telefone do cidadão             |
-| STATUS            | VARCHAR2(20)| NOT NULL    | Aberta, Em Análise, Respondida  |
-| RESPOSTA          | CLOB        | NULL       | Resposta do atendente           |
-| DATA_CRIACAO      | TIMESTAMP   | NOT NULL    | Data/hora de criação            |
-| DATA_ATUALIZACAO  | TIMESTAMP   | NULL       | Última atualização              |
+- `POST /api/manifestacoes` - Criar nova manifestação
+- `GET /api/manifestacoes/{id}` - Buscar manifestação por ID
+- `GET /api/manifestacoes/protocolo/{protocolo}` - Buscar por protocolo
+- `GET /api/manifestacoes` - Listar manifestações (com paginação)
+- `GET /api/manifestacoes/status/{status}` - Listar por status
+- `GET /api/manifestacoes/tipo/{tipo}` - Listar por tipo
+- `GET /api/manifestacoes/email/{email}` - Listar por email
+- `PUT /api/manifestacoes/{id}/status` - Atualizar status
+- `GET /api/manifestacoes/periodo` - Buscar por período
+- `GET /api/manifestacoes/hoje` - Manifestações de hoje
+- `GET /api/manifestacoes/contagem/status/{status}` - Contar por status
+- `GET /api/manifestacoes/contagem/tipo/{tipo}` - Contar por tipo
 
----
+### Informações da API
 
-## Entrega Esperada
+- `GET /api/info` - Informações gerais da API
+- `GET /api/health` - Health check
+- `GET /api/status` - Status da aplicação
 
-- Este documento (README.md) documenta todos os itens solicitados no teste.  
-- Protótipo de tela ou modelagem de dados pode ser adicionado em diretórios específicos (ex: `/docs` ou `/design`).  
-- Diferencial: implementação do sistema com link para demonstração.  
+## 📚 Documentação da API
 
----
+- **Swagger UI**: http://localhost:8080/swagger-ui.html
+- **OpenAPI JSON**: http://localhost:8080/api-docs
 
-## Possíveis Extensões Futuras
+## 🗄️ Banco de Dados
 
-- Autenticação de atendentes com controle de permissões.  
-- Dashboard com estatísticas de manifestações por tipo/status.  
-- Notificação por e-mail ao cidadão quando houver resposta.  
+### Desenvolvimento
 
----
+- **Host**: localhost:3306
+- **Database**: ouvidoria_dev
+- **Usuário**: root
+- **Senha**: root
+- **Driver**: com.mysql.cj.jdbc.Driver
 
-## Diagramas de Sequência
+### Produção
 
-### Registrar Manifestação
-![Diagrama Registrar Manifestação](docs/RegistrarManifestacao.png)  
-[Código fonte do diagrama](docs/RegistrarManifestacao.txt)
+- **Host**: Configurado via variável de ambiente
+- **Database**: ouvidoria_prod
+- **Usuário**: Configurado via variável de ambiente
+- **Senha**: Configurado via variável de ambiente
 
----
+## 🔧 Configurações
 
-### Atendimento e Consulta por Protocolo
-![Diagrama Atendimento e Consulta por Protocolo](docs/AtendimentoConsultaProtocolo.png)  
-[Código fonte do diagrama](docs/AtendimentoConsultaProtocolo.txt)
+### Arquivos de Configuração
 
----
+- `application.yml` - Configurações gerais
+- `application-dev.yml` - Configurações de desenvolvimento
+- `application-prod.yml` - Configurações de produção
 
-## Entrega Esperada
-- Este README documenta todos os itens solicitados no teste.
-- O protótipo de tela (opção A) e/ou a modelagem de dados (opção B) podem ser incluídos em `/docs` ou `/design`.
-- Diferencial: incluir link de um sistema funcional (demo) no repositório.
+### Perfil de Desenvolvimento
 
-## Extensões Futuras (Opcional)
-- Autenticação e autorização para atendentes.
-- Dashboard com estatísticas por tipo e status.
-- Notificações por e-mail ao cidadão quando houver resposta.
+- Banco MySQL local
+- Logs detalhados
+- Validação de esquema Flyway
+- Criação automática do banco se não existir
+
+### Perfil de Produção
+
+- Banco MySQL configurável
+- Logs reduzidos
+- Validação de esquema Flyway
+- Configurações de segurança
+
+## 📊 Funcionalidades
+
+### Tipos de Manifestação
+
+- **Denúncia**: Reportar irregularidades
+- **Reclamação**: Expressar insatisfação
+- **Sugestão**: Propor melhorias
+- **Elogio**: Reconhecer bons serviços
+- **Solicitação**: Solicitar serviços
+- **Informação**: Buscar informações
+
+### Status das Manifestações
+
+- **Aberta**: Manifestação recebida
+- **Em Análise**: Sendo analisada
+- **Em Andamento**: Sendo processada
+- **Resolvida**: Manifestação atendida
+- **Cancelada**: Manifestação cancelada
+- **Arquivada**: Manifestação arquivada
+
+## 🚀 Funcionalidades Principais
+
+1. **Criação de Manifestações**: Sistema gera protocolo único automaticamente
+2. **Consulta por Protocolo**: Permite cidadãos acompanharem suas manifestações
+3. **Atualização de Status**: Funcionários podem atualizar o andamento
+4. **Filtros e Buscas**: Por tipo, status, email, período
+5. **Paginação**: Para grandes volumes de dados
+6. **Validações**: Dados são validados antes de serem processados
+7. **Tratamento de Erros**: Respostas padronizadas de erro
+8. **Documentação**: API completamente documentada com Swagger
+
+## 🔒 Segurança
+
+- Validação de entrada de dados
+- Tratamento de exceções
+- CORS configurado
+- Logs de auditoria
+
+## 📝 Licença
+
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+
+## 👥 Contribuição
+
+1. Faça um fork do projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a branch (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request
+
+## 📞 Suporte
+
+Para suporte, envie um email para dev@cidadecidada.com ou abra uma issue no repositório.
 

@@ -1,0 +1,53 @@
+# Configurações do perfil de produção
+spring:
+  profiles:
+    active: prod
+  
+  # Configurações do banco MySQL 8.0
+  datasource:
+    url: ${MYSQL_URL:jdbc:mysql://localhost:3306/ouvidoria_prod?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=America/Sao_Paulo}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${MYSQL_USERNAME:ouvidoria}
+    password: ${MYSQL_PASSWORD:ouvidoria123}
+  
+  # Configurações JPA
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+        dialect: org.hibernate.dialect.MySQLDialect
+  
+  # Configurações Flyway
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    validate-on-migrate: true
+    url: ${MYSQL_URL:jdbc:mysql://localhost:3306/ouvidoria_prod?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=America/Sao_Paulo}
+    user: ${MYSQL_USERNAME:ouvidoria}
+    password: ${MYSQL_PASSWORD:ouvidoria123}
+
+# Configurações do servidor
+server:
+  port: ${PORT:8080}
+
+# Configurações de logging
+logging:
+  level:
+    com.cidadecidada.ouvidoria: INFO
+    org.springframework.web: INFO
+    org.hibernate.SQL: WARN
+    org.hibernate.type.descriptor.sql.BasicBinder: WARN
+
+# Configurações de segurança (recomendado para produção)
+# spring:
+#   security:
+#     basic:
+#       enabled: true
+#     user:
+#       name: ${ADMIN_USERNAME:admin}
+#       password: ${ADMIN_PASSWORD:admin123}

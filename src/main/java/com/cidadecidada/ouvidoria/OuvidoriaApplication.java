@@ -1,13 +1,13 @@
-package org.cidadecidada.portal_ouvidoria_simples;
+package com.cidadecidada.ouvidoria;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class CidadecidadaApplication {
+public class OuvidoriaApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(CidadecidadaApplication.class, args);
+		SpringApplication.run(OuvidoriaApplication.class, args);
 	}
 
 }
