@@ -1,0 +1,61 @@
+title Atendimento e Consulta por Protocolo
+
+participant "Atendente" as T
+participant "Portal (Backoffice)" as B
+participant "API Ouvidoria" as A
+participant "Banco de Dados" as DB
+participant "Cidadão" as C
+participant "Serviço de E-mail" as M
+
+== Atendente lista e responde ==
+T->B: Acessa lista de manifestações
+B->A: GET /manifestacoes?tipo=&status=
+activate A
+A->DB: SELECT por filtros (tipo/status)
+activate DB
+DB-->A: Lista de manifestações
+deactivate DB
+A-->B: 200 OK (lista)
+deactivate A
+B->T: Exibe lista
+
+T->B: Abre uma manifestação
+B->A: GET /manifestacoes/{protocolo}
+activate A
+A->DB: SELECT por protocolo
+activate DB
+DB-->A: Detalhes (ABERTA/EM_ANALISE)
+deactivate DB
+A-->B: 200 OK (detalhes)
+deactivate A
+B->T: Exibe detalhes
+
+T->B: Envia resposta e altera status\n(POST /manifestacoes/{protocolo}/resposta)
+B->A: Repassa resposta + novo status
+activate A
+A->DB: UPDATE resposta e status ("RESPONDIDA")
+activate DB
+DB-->A: OK
+deactivate DB
+A-->B: 200 OK (atualizado)
+deactivate A
+B->T: Confirma atualização
+
+note over B,M: Se contato do cidadão existir (opcional)
+B->M: Solicita e-mail com resposta e status
+activate M
+M-->B: Confirma envio
+deactivate M
+end note
+
+== Cidadão consulta por protocolo ==
+C->B: Informa protocolo para consulta
+B->A: GET /manifestacoes/{protocolo}
+activate A
+A->DB: SELECT por protocolo
+activate DB
+DB-->A: Detalhes + status + resposta (se houver)
+deactivate DB
+A-->B: 200 OK (dados da manifestação)
+deactivate A
+B->C: Exibe status atual e resposta

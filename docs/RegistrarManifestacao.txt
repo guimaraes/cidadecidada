@@ -1,0 +1,38 @@
+title Registrar Manifestação
+
+participant "Cidadão" as C
+participant "Portal Web" as W
+participant "API Ouvidoria" as A
+participant "Banco de Dados" as DB
+participant "Serviço de E-mail" as M
+
+C->W: Abre tela "Registrar Manifestação"
+W->C: Exibe formulário (tipo, título, descrição, contato)
+
+C->W: Envia formulário preenchido (POST /manifestacoes)
+W->A: Repassa payload de registro
+
+activate A
+A->A: Valida campos obrigatórios\n(tipo, título, descrição)
+A->DB: INSERT Manifestação (gera ID)
+activate DB
+DB-->A: OK (ID gerado)
+deactivate DB
+
+A->A: Gera Protocolo único
+A->DB: UPDATE Manifestação com Protocolo
+activate DB
+DB-->A: OK
+deactivate DB
+
+A-->W: 201 Created\n{ protocolo, status="ABERTA" }
+deactivate A
+
+W->C: Exibe protocolo para consulta futura
+
+note over C,M: Se e-mail informado (opcional)
+W->M: Solicita envio de e-mail com protocolo
+activate M
+M-->W: Confirma envio
+deactivate M
+end note
