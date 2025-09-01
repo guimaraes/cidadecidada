@@ -75,7 +75,7 @@ cd cidadecidada
 mvn spring-boot:run
 ```
 
-## 🌐 Endpoints da API
+## Endpoints da API
 
 ### Manifestações
 
@@ -103,7 +103,7 @@ mvn spring-boot:run
 - **Swagger UI**: http://localhost:8080/swagger-ui.html
 - **OpenAPI JSON**: http://localhost:8080/api-docs
 
-## 🗄️ Banco de Dados
+## Banco de Dados
 
 ### Configuração
 
