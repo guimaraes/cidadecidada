@@ -2,7 +2,7 @@
 
 Backend em Java 17 com Spring Boot 3.5.5 para o sistema de ouvidoria municipal, implementado com arquitetura MVC e banco de dados versionado via Flyway.
 
-## 🚀 Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 - **Java 17**
 - **Spring Boot 3.5.5**
@@ -13,7 +13,7 @@ Backend em Java 17 com Spring Boot 3.5.5 para o sistema de ouvidoria municipal, 
 - **springdoc-openapi** - Para documentação da API
 - **MySQL 8.0** - Banco de dados principal
 
-## 📁 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
 com.cidadecidada.ouvidoria
@@ -27,7 +27,7 @@ com.cidadecidada.ouvidoria
     └── service            # Lógica de negócio
 ```
 
-## 🏗️ Arquitetura
+## Arquitetura
 
 O projeto segue o padrão **MVC (Model-View-Controller)** com as seguintes camadas:
 
@@ -37,7 +37,7 @@ O projeto segue o padrão **MVC (Model-View-Controller)** com as seguintes camad
 - **Service**: Camada de lógica de negócio
 - **Repository**: Camada de acesso a dados
 
-## 🚀 Como Executar
+## Como Executar
 
 ### Pré-requisitos
 
@@ -98,7 +98,7 @@ mvn spring-boot:run
 - `GET /api/health` - Health check
 - `GET /api/status` - Status da aplicação
 
-## 📚 Documentação da API
+## Documentação da API
 
 - **Swagger UI**: http://localhost:8080/swagger-ui.html
 - **OpenAPI JSON**: http://localhost:8080/api-docs
@@ -113,7 +113,7 @@ mvn spring-boot:run
 - **Senha**: root
 - **Driver**: com.mysql.cj.jdbc.Driver
 
-## 🔧 Configurações
+## Configurações
 
 ### Arquivo de Configuração
 
@@ -128,7 +128,7 @@ mvn spring-boot:run
 - Documentação Swagger habilitada
 - CORS configurado
 
-## 📊 Funcionalidades
+## Funcionalidades
 
 ### Tipos de Manifestação
 
@@ -148,7 +148,7 @@ mvn spring-boot:run
 - **Cancelada**: Manifestação cancelada
 - **Arquivada**: Manifestação arquivada
 
-## 🚀 Funcionalidades Principais
+## Funcionalidades Principais
 
 1. **Criação de Manifestações**: Sistema gera protocolo único automaticamente
 2. **Consulta por Protocolo**: Permite cidadãos acompanharem suas manifestações
@@ -159,26 +159,10 @@ mvn spring-boot:run
 7. **Tratamento de Erros**: Respostas padronizadas de erro
 8. **Documentação**: API completamente documentada com Swagger
 
-## 🔒 Segurança
+## Segurança
 
 - Validação de entrada de dados
 - Tratamento de exceções
 - CORS configurado
 - Logs de auditoria
-
-## 📝 Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
-
-## 👥 Contribuição
-
-1. Faça um fork do projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
-5. Abra um Pull Request
-
-## 📞 Suporte
-
-Para suporte, envie um email para dev@cidadecidada.com ou abra uma issue no repositório.
 
