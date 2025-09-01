@@ -62,29 +62,17 @@ docker ps
 
 1. Instale MySQL 8.0
 2. Crie um usuário ou use o root
-3. Configure as credenciais no arquivo `application-dev.yml`
+3. Configure as credenciais no arquivo `application.yml`
 
-### Desenvolvimento
+### Execução da Aplicação
 
 ```bash
 # Clonar o repositório
 git clone <repository-url>
 cd cidadecidada
 
-# Executar com perfil de desenvolvimento
-mvn spring-boot:run -Dspring.profiles.active=dev
-```
-
-### Produção
-
-```bash
-# Configurar variáveis de ambiente
-export MYSQL_URL=jdbc:mysql://localhost:3306/ouvidoria_prod?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=America/Sao_Paulo
-export MYSQL_USERNAME=ouvidoria
-export MYSQL_PASSWORD=ouvidoria123
-
-# Executar com perfil de produção
-mvn spring-boot:run -Dspring.profiles.active=prod
+# Executar a aplicação
+mvn spring-boot:run
 ```
 
 ## 🌐 Endpoints da API
@@ -117,7 +105,7 @@ mvn spring-boot:run -Dspring.profiles.active=prod
 
 ## 🗄️ Banco de Dados
 
-### Desenvolvimento
+### Configuração
 
 - **Host**: localhost:3306
 - **Database**: ouvidoria_dev
@@ -125,34 +113,20 @@ mvn spring-boot:run -Dspring.profiles.active=prod
 - **Senha**: root
 - **Driver**: com.mysql.cj.jdbc.Driver
 
-### Produção
-
-- **Host**: Configurado via variável de ambiente
-- **Database**: ouvidoria_prod
-- **Usuário**: Configurado via variável de ambiente
-- **Senha**: Configurado via variável de ambiente
-
 ## 🔧 Configurações
 
-### Arquivos de Configuração
+### Arquivo de Configuração
 
-- `application.yml` - Configurações gerais
-- `application-dev.yml` - Configurações de desenvolvimento
-- `application-prod.yml` - Configurações de produção
+- `application.yml` - Configurações gerais da aplicação
 
-### Perfil de Desenvolvimento
+### Configurações Principais
 
 - Banco MySQL local
 - Logs detalhados
 - Validação de esquema Flyway
 - Criação automática do banco se não existir
-
-### Perfil de Produção
-
-- Banco MySQL configurável
-- Logs reduzidos
-- Validação de esquema Flyway
-- Configurações de segurança
+- Documentação Swagger habilitada
+- CORS configurado
 
 ## 📊 Funcionalidades
 

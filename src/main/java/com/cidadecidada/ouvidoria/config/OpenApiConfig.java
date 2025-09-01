@@ -12,29 +12,27 @@ import java.util.List;
 
 @Configuration
 public class OpenApiConfig {
-    
+
     @Bean
     public OpenAPI customOpenAPI() {
-        return new OpenAPI()
-                .info(new Info()
-                        .title("Portal de Ouvidoria Simples")
-                        .description("API REST para gerenciamento de manifestações da ouvidoria municipal. " +
-                                   "Permite criar, consultar e gerenciar manifestações dos cidadãos.")
-                        .version("1.0.0")
-                        .contact(new Contact()
-                                .name("Equipe de Desenvolvimento")
-                                .email("dev@cidadecidada.com")
-                                .url("https://www.cidadecidada.com"))
-                        .license(new License()
-                                .name("MIT License")
-                                .url("https://opensource.org/licenses/MIT")))
-                .servers(List.of(
-                        new Server()
-                                .url("http://localhost:8080")
-                                .description("Servidor de Desenvolvimento"),
-                        new Server()
-                                .url("https://api.cidadecidada.com")
-                                .description("Servidor de Produção")
-                ));
+        Info apiInfo = new Info()
+                .title("Portal de Ouvidoria Simples")
+                .description("API REST para gerenciamento de manifestações da ouvidoria municipal. " +
+                        "Permite criar, consultar e gerenciar manifestações dos cidadãos.")
+                .version("1.0.0")
+                .contact(new Contact()
+                        .name("Equipe de Desenvolvimento")
+                        .email("dev@cidadecidada.com")
+                        .url("https://www.cidadecidada.com"))
+                .license(new License()
+                        .name("MIT License")
+                        .url("https://opensource.org/licenses/MIT"));
+
+        List<Server> servers = List.of(
+                new Server().url("http://localhost:8080").description("Servidor de Desenvolvimento"),
+                new Server().url("https://api.cidadecidada.com").description("Servidor de Produção")
+        );
+
+        return new OpenAPI().info(apiInfo).servers(servers);
     }
 }
