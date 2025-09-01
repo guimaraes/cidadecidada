@@ -41,7 +41,6 @@ spring:
     time-zone: America/Sao_Paulo
   
 
-
 # Configurações do SpringDoc OpenAPI
 springdoc:
   api-docs:
